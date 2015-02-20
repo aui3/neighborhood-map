@@ -16,11 +16,23 @@ html, body {
 	overflow: visible;
 	
 }
-#neighborhood-div {
+#places-list {
 
+	list-style: none;
 	top: 20px;
 	left: 20px;
 	position: fixed;
 	z-index: 100;
 	overflow: visible;
+
+	text-align: left;
+    display: block;
+    
+    
+    width: 20%;
+}
+
+#list-item {
+	padding :2%;
+
 }

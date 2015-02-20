@@ -4,19 +4,27 @@
     <meta charset="UTF-8">
     <title>AUI Neighborhood Map! Explore Irvine!!</title>
 </head>
-<body data-bind = "with : location">
+<body >
    
 <div id="search-div">
  <label> Search for:</label> <input data-bind = "value : searchTerm" />
 </div>
 
+<!--<div >
+    <ul data-bind="foreach : location().locations()">
+        <li data-bind="text : name">
+    </ul>
+</div>
+!-->
 <div >
-    <ul data-bind="foreach : locations">
-        <li data-bind="text : year">
+    <ul id="places-list" data-bind="foreach : displayList">
+        <li id="list-item" data-bind="text : name"></li>
     </ul>
 </div>
 
+<div id="map" >
 
+</div>
 
 
 <!--
@@ -35,9 +43,12 @@
         
     </div>
 !-->
+    <script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?libraries=places"></script>
     <script src="js/lib/knockout-3.2.0.js"></script>
-    
+    <script src="js/lib/jquery.min.js"></script>
     <script src="js/app.js"></script>
+    
+    
     <link href="css/style.css" rel="stylesheet" type="text/css">
 </body>
 </html>
