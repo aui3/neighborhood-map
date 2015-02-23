@@ -26,7 +26,11 @@ var Locations = function () {
                       });
           
           var infoWindow = new google.maps.InfoWindow ( { 
-                            content : data.response.groups[0].items[i].venue.name
+                            content : '<p><strong>'+data.response.groups[0].items[i].venue.name+ '</strong></p>'+
+                                      '<p>'+data.response.groups[0].items[i].venue.contact.formattedPhone+'</p>'+
+                                      //'<p>'+data.response.groups[0].items[i].venue.menu.url+'</p>'+
+                                      '<p>'+data.response.groups[0].items[i].venue.url+'</p>'
+
                             });
           
           self.locations.push({ 
@@ -77,14 +81,15 @@ var LocationsViewModel = function () {
       if (self.searchTerm() =='') { //display default list
         
         //setmap off all markers.
-        for (var i=0; i< allPlaces.length; i++)
-        {
+        for (var i=0; i< allPlaces.length; i++) {
+
             allPlaces[i].marker.setMap(this.map);
 
             google.maps.event.addListener ( allPlaces[i].marker, 'click', (function(allPlacesCopy) {
                 
                 return function () {
                   //self.test(allPlacesCopy.name);
+        
                   allPlacesCopy.infowindow.open( self.map,this);
 
                 }
@@ -97,17 +102,23 @@ var LocationsViewModel = function () {
         return allPlaces;
       
       }
+      else { //search term given
+       
+        var filteredList=[];
+        //search for places matching the search term
+        for (var i=0; i<allPlaces.length; i++) {
+          
+          if ( allPlaces[i]['name'].toLowerCase().indexOf(self.searchTerm().toLowerCase()) != -1 ) { 
+          
+              filteredList.push(allPlaces[i]);
+          
+          }
+          else { //hide the marker
 
-      var filteredList=[];
-      //search for places matching the search term
-      for (var i=0; i<allPlaces.length; i++) {
-        
-        if ( allPlaces[i]['name'].toLowerCase().indexOf(self.searchTerm().toLowerCase()) != -1 ) { 
-        
-            filteredList.push(allPlaces[i]);
-        
+            allPlaces[i].marker.setMap(null);
+          }
+
         }
-
       }
       
       return filteredList; //display list will be this filtered list
@@ -116,7 +127,8 @@ var LocationsViewModel = function () {
 
     self.displayInfo = function () {
       //self.test(this.lat);
-      this.marker.setAnimation(google.maps.Animation.BOUNCE);//.setAnimation(google.maps.Animation.BOUNCE);
+      //this.marker.setAnimation(google.maps.Animation.BOUNCE);//.setAnimation(google.maps.Animation.BOUNCE);
+      google.maps.event.trigger(this.marker, 'click');
       //console.log(this.lat);
 
     };
