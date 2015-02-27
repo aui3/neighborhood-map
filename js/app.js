@@ -4,7 +4,7 @@ var Locations = function () {
   var self=this;
 
   self.locations = ko.observableArray();
-  
+  self.error = ko.observable(0);
 
   //IIFE to load data and set up locations
   self.loadData = (function () {
@@ -42,9 +42,10 @@ var Locations = function () {
               //'lng': data.response.groups[0].items[i].venue.location.lng
           });    
         }
-        
+        //self.error(0);
       }).fail ( function (){
-          console.log ("Error");
+          self.error(1);
+          console.log("Error");
       });
 
     })();
@@ -56,6 +57,9 @@ var LocationsViewModel = function () {
 
   var self=this;
 
+
+  self.mapError = ko.observable(0);//0 if no error
+
   self.location=ko.observable(new Locations());
 
   self.searchTerm = ko.observable(''); 
@@ -66,12 +70,20 @@ var LocationsViewModel = function () {
   self.mapOptions = {
       //disableDefaultUI: true
       center: { lat: 33.669444, lng: -117.823056},
-      zoom: 12
+      zoom: 13
   };
 
   self.map =  new google.maps.Map(document.getElementById('map'), self.mapOptions);
 
+  if (typeof google === 'object' && typeof google.maps === 'object') {
+
+    console.log(self.mapError());
+
   self.map.setCenter({ lat: 33.669444, lng: -117.823056});
+
+   //var bounds = new google.maps.LatLngBounds();
+   //bounds.extend(new google.maps.LatLng(33.669444, -117.823056));
+   //self.map.fitBounds(bounds);
 
   /* Display Filtered List*/
   self.displayList = ko.computed ( function ( ) {
@@ -91,6 +103,7 @@ var LocationsViewModel = function () {
                   //self.test(allPlacesCopy.name);
         
                   allPlacesCopy.infowindow.open( self.map,this);
+                  self.map.setCenter(this .getPosition());
 
                 }
               //console.log(allPlaces[i].name);
@@ -132,6 +145,14 @@ var LocationsViewModel = function () {
       //console.log(this.lat);
 
     };
+  }
+  else
+  {
+
+    
+    self.mapError(1);
+    console.log("error",self.mapError);
+  }
 
 }
 

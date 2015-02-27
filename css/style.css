@@ -13,17 +13,20 @@ html, body {
 	bottom: 40px;
 	left : 70px;
 	z-index: 100;
-	width: 10%;
+	max-width: 500px;
+	width: 80%;
 	height: 10%;
 	padding: 1%;
-	background-color: white;	
-	box-shadow: 5px 5px 3px 0px rgba(50, 50, 50, 0.75);
 
 }
 
 #search-input {
+  
+  font-size: 15px;
+  line-height: 20px;
+  width: 100%;
+  
 
-	size: 50;
 }
 #map {
 
@@ -56,4 +59,20 @@ html, body {
 }
 #list-item :hover {
 	font-weight: bold;
+}
+
+.error {
+
+	display:none;
+
+	position:fixed;
+font-size : xx-large;
+text-align: center;
+left:0px;
+top:0px;
+width:100%;
+height:100%;
+z-index:150;
+background-color: white;
+	
 }
