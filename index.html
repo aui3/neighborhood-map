@@ -10,10 +10,11 @@
 There was error completing your request. 
 </div>
 
-<div class="error" data-bind="style: { display : mapError ? 'block' : 'none' }" >
+<!--<div class="error" data-bind="style: { display : mapError ? 'block' : 'none' }" >
  Google maps could not load!
 </div>
 
+!-->
 
 <div id="search-div"  >
  <label> Search for:</label> <input id = "search-input" data-bind = "value : searchTerm" />
@@ -57,7 +58,7 @@ There was error completing your request.
         
     </div>
 !-->
-   <script type="text/javascript" src="http://maps.oogleapis.com/maps/api/js?libraries=places"></script>
+   <script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?libraries=places"></script>
     <script src="js/lib/knockout-3.2.0.js"></script>
     <script src="js/lib/jquery.min.js"></script>
     <script src="js/app.js"></script>
