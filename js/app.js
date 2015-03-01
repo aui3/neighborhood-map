@@ -77,13 +77,19 @@ var LocationsViewModel = function () {
 
   if (typeof google === 'object' && typeof google.maps === 'object') {
 
-    console.log(self.mapError());
+    //
+
+
+    //console.log(self.mapError());
 
   self.map.setCenter({ lat: 33.669444, lng: -117.823056});
-
-   //var bounds = new google.maps.LatLngBounds();
-   //bounds.extend(new google.maps.LatLng(33.669444, -117.823056));
+  self.lastInfoWindow = ko.observable ('');
+   
+  //var bounds = new google.maps.LatLngBounds();
+  //bounds.extend(new google.maps.LatLng({lat: 33.669444, lng: -117.823056}));
    //self.map.fitBounds(bounds);
+
+
 
   /* Display Filtered List*/
   self.displayList = ko.computed ( function ( ) {
@@ -99,11 +105,22 @@ var LocationsViewModel = function () {
 
             google.maps.event.addListener ( allPlaces[i].marker, 'click', (function(allPlacesCopy) {
                 
-                return function () {
+                return function () {  
                   //self.test(allPlacesCopy.name);
-        
-                  allPlacesCopy.infowindow.open( self.map,this);
-                  self.map.setCenter(this .getPosition());
+                  //check if an info window is not open set this window as last open window
+                  if(self.lastInfoWindow() == ''){
+                        //self.currentInfoWindow.close();
+                        self.lastInfoWindow(allPlacesCopy.infowindow);
+                        allPlacesCopy.infowindow.open( self.map,this);
+                        self.map.setCenter(this.getPosition());
+                  }
+                  else //lastinfowindow open close this and set current info window as lastwindow open for the next iteration
+                  {
+                    self.lastInfoWindow().close();
+                    allPlacesCopy.infowindow.open( self.map,this);
+                    self.map.setCenter(this .getPosition());
+                    self.lastInfoWindow(allPlacesCopy.infowindow);
+                  }
 
                 }
               //console.log(allPlaces[i].name);
@@ -145,7 +162,7 @@ var LocationsViewModel = function () {
       //console.log(this.lat);
 
     };
-  }
+  }   
   else
   {
 
@@ -153,6 +170,42 @@ var LocationsViewModel = function () {
     self.mapError(1);
     console.log("error",self.mapError);
   }
+
+  // make sure the map bounds get updated on page resize
+  google.maps.event.addDomListener(window, "resize", function() {
+     /* 
+      var center; 
+      
+      if(self.lastInfoWindow() == '') {
+        center = self.map.getCenter();
+      }
+      else
+      { 
+          console.log(self.lastInfoWindow().getPosition());
+          center = self.lastInfoWindow().getPosition(); 
+
+      }
+      google.maps.event.trigger(self.map, "resize");
+      self.map.setCenter(center); 
+      */
+
+      //var boundbox = new google.maps.LatLngBounds();
+      //boundbox.extend(new google.maps.LatLng({ lat: 33.669444, lng: -117.823056}));
+      //self.map.setCenter(boundbox.getCenter());
+      //self.map.fitBounds(boundbox);
+
+
+      var boundbox = new google.maps.LatLngBounds();
+      for ( var i = 0; i < self.location().locations().length; i++ )
+      {
+        //console.log(self.location().locations()[i].marker.getPosition());
+        boundbox.extend(self.location().locations()[i].marker.getPosition());
+      }
+      self.map.setCenter(boundbox.getCenter());
+      self.map.fitBounds(boundbox);
+
+
+});
 
 }
 
