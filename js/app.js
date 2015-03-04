@@ -73,7 +73,7 @@ var LocationsViewModel = function () {
   self.mapOptions = {
       //disableDefaultUI: true
       center: { lat: 33.669444, lng: -117.823056},
-      zoom: 13
+      zoom: 14
   };
 
   if (typeof google === 'object'  && typeof google.maps === 'object') {
