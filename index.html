@@ -6,15 +6,13 @@
 </head>
 <body >
    
-<div class="error" data-bind="style: { display : location().error() ? 'block' : 'none' }" >
+<div class="error" data-bind="style: { display : location().apiError() ? 'block' : 'none' }" >
 There was error completing your request. 
 </div>
 
-<!--<div class="error" data-bind="style: { display : mapError ? 'block' : 'none' }" >
+<div class="error" data-bind="style: { display : mapError() ? 'block' : 'none' }" >
  Google maps could not load!
 </div>
-
-!-->
 
 <div id="search-div"  >
  <label> Search for:</label> <input id = "search-input" data-bind = "value : searchTerm" />
@@ -38,7 +36,7 @@ There was error completing your request.
 
 </div >
 
-<div id="test" data-bind="text : test"> 
+<div id="test" data-bind="text : mapError() "> 
 </div>
 
 

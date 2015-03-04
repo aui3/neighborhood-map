@@ -65,6 +65,12 @@ html, body {
 
 	z-index: 100;
 }
+.error1 {
+
+	display:none;
+	
+}
+
 .error {
 
 	display:none;
