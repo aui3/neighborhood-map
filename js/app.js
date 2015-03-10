@@ -1,4 +1,4 @@
-/* LOCATION MODEL*/
+/* LOCATION MODEL holds all information for the locations to be displayed*/
 var Locations = function () {
   
   var self=this;
@@ -6,9 +6,10 @@ var Locations = function () {
   self.locations = ko.observableArray();
   self.apiError = ko.observable(false);
 
-  //IIFE to load data and set up locations
+  //IIFE to load data and set up locations Array
   self.loadData = (function () {
     
+    //get top 10 restaurants for Irvine,CA
     var foursquare="https://api.foursquare.com/v2/venues/explore?client_id=TCESTHYEP5B4JGEU2IHGJVXSQL3ONR0ZGML5DJY0OTEIJZ3X&client_secret=UBF0HHQEQG3K01KKTGXZLPGKBCPLKFK1VQFRBJ4GAMKKYDZ3&v=20130815&ll=33.669444,-117.823056&section=food&limit=10";  
     
     $.getJSON(foursquare,
@@ -18,38 +19,34 @@ var Locations = function () {
         var places=data.response.groups[0].items;
       
         for (var i=0; i<places.length; i++) {
-          
+          //add marker for this location
           var marker = new google.maps.Marker({
                         position: { lat: data.response.groups[0].items[i].venue.location.lat , 
                           lng : data.response.groups[0].items[i].venue.location.lng },
                         title : data.response.groups[0].items[i].venue.name
                       });
-          
+          //add infor window to this location
           var infoWindow = new google.maps.InfoWindow ( { 
                             content : '<p><strong>'+data.response.groups[0].items[i].venue.name+ '</strong></p>'+
                                       '<p>'+data.response.groups[0].items[i].venue.contact.formattedPhone+'</p>'+
                                       //'<p>'+data.response.groups[0].items[i].venue.menu.url+'</p>'+
                                       '<p>'+data.response.groups[0].items[i].venue.url+'</p>'
-
                             });
-          
+                
           self.locations.push({ 
               'venue' : data.response.groups[0].items[i].venue,
               'name' : data.response.groups[0].items[i].venue.name, 
               'marker': marker,
               'infowindow' : infoWindow
-              //'lat': data.response.groups[0].items[i].venue.location.lat ,
-              //'lng': data.response.groups[0].items[i].venue.location.lng
           });    
         }
+
         self.apiError(false);
-        console.log("succes",self.apiError())
 
       }).fail ( function (){
+          //getJSON failed, display error message
           self.apiError(true);
-          console.log("Error", self.apiError());
       });
-
     })();
 
 }
@@ -59,20 +56,18 @@ var LocationsViewModel = function () {
 
   var self=this;
 
-
   self.mapError = ko.observable(false);//0 if no error
 
+  //array of all the places and all info pretaining to each place such as marker, info window etc 
   self.location=ko.observable(new Locations());
 
-  console.log(self.location().apiError());
   self.searchTerm = ko.observable(''); 
 
-  self.test=ko.observable(0);
 
   /* MAP */
   self.mapOptions = {
-      //disableDefaultUI: true
-      center: { lat: 33.669444, lng: -117.823056},
+        //center at Irvine, CA's latitude and longitude
+        center: { lat: 33.669444, lng: -117.823056},
       zoom: 14
   };
 
@@ -80,53 +75,50 @@ var LocationsViewModel = function () {
     
     self.map =  new google.maps.Map(document.getElementById('map'), self.mapOptions);
 
-
     self.map.setCenter({ lat: 33.669444, lng: -117.823056});
     self.lastInfoWindow = ko.observable ('');
 
-
-    /* Display Filtered List*/
+    /* Display Filtered List, computed based on the search term*/
     self.displayList = ko.computed ( function ( ) {
         
         var allPlaces = self.location().locations();
         
-        if (self.searchTerm() == '') { //display default list
+        if (self.searchTerm() == '') { //display default list i.e all locations
           
-          //setmap off all markers.
+          //setmap of all markers. (add all makers to this map)
           for (var i = 0; i < allPlaces.length; i++) {
 
               allPlaces[i].marker.setMap(this.map);
 
+              //event listener to trigger opening of infowindow  
               google.maps.event.addListener ( allPlaces[i].marker, 'click', (function(allPlacesCopy) {
                   
-                  return function () {  
-                    //self.test(allPlacesCopy.name);
-                    //check if an info window is not open set this window as last open window
-                    if(self.lastInfoWindow() == ''){
-                          //self.currentInfoWindow.close();
-                          self.lastInfoWindow(allPlacesCopy.infowindow);
-                          allPlacesCopy.infowindow.open( self.map,this);
-                          self.map.setCenter(this.getPosition());
-                    }
-                    else {//lastinfowindow open close this and set current info window as lastwindow open for the next iteration
-          
-                      self.lastInfoWindow().close();
-                      allPlacesCopy.infowindow.open( self.map,this);
-                      self.map.setCenter(this .getPosition());
-                      self.lastInfoWindow(allPlacesCopy.infowindow);
-                    }
-
+                return function () {  
+        
+                  //check if an info window is not open set this window as last open window
+                  if(self.lastInfoWindow() == ''){
+                    self.lastInfoWindow(allPlacesCopy.infowindow);
+                    allPlacesCopy.infowindow.open( self.map,this);
+                    self.map.setCenter(this.getPosition());
                   }
-                //console.log(allPlaces[i].name);
-                  //allPlaces[i].infowindow.open( self.map,this);
-              })(allPlaces[i]) );
+                  //lastinfowindow open close this and set current info window as lastwindow open for the next iteration
+                  else {
+    
+                    self.lastInfoWindow().close();
+                    allPlacesCopy.infowindow.open( self.map,this);
+                    self.map.setCenter(this .getPosition());
+                    self.lastInfoWindow(allPlacesCopy.infowindow);
+                  }
+
+                }
+            })(allPlaces[i]) );
 
           }
-          //console.log(self.location().locations());
+    
           return allPlaces;
-        
         }
-        else { //search term given
+        //search term given, filter according to this term
+        else { 
          
           var filteredList=[];
           //search for places matching the search term
@@ -137,7 +129,7 @@ var LocationsViewModel = function () {
                 filteredList.push(allPlaces[i]);
             
             }
-            else { //hide the marker
+            else { //hide the marker since this is not a display list item
 
               allPlaces[i].marker.setMap(null);
             }
@@ -149,66 +141,34 @@ var LocationsViewModel = function () {
 
       },self);
       //handle click events in the list
-      self.displayInfo = function () {
-        //self.test(this.lat);
-        //this.marker.setAnimation(google.maps.Animation.BOUNCE);//.setAnimation(google.maps.Animation.BOUNCE);
-        google.maps.event.trigger(this.marker, 'click');
-        //console.log(this.lat);
-
-      };
-       google.maps.event.addDomListener(window, "resize", function() {
-     /* 
-      var center; 
+    self.displayInfo = function () {
       
-      if(self.lastInfoWindow() == '') {
-        center = self.map.getCenter();
-      }
-      else
-      { 
-          console.log(self.lastInfoWindow().getPosition());
-          center = self.lastInfoWindow().getPosition(); 
-
-      }
-      google.maps.event.trigger(self.map, "resize");
-      self.map.setCenter(center); 
-      */
-
-      //var boundbox = new google.maps.LatLngBounds();
-      //boundbox.extend(new google.maps.LatLng({ lat: 33.669444, lng: -117.823056}));
-      //self.map.setCenter(boundbox.getCenter());
-      //self.map.fitBounds(boundbox);
-
-
+      google.maps.event.trigger(this.marker, 'click');
+      
+    };
+    
+    //set the bounds of the map on window resize to ensure all markers are displayed
+     // make sure the map bounds get updated on page resize
+    google.maps.event.addDomListener(window, "resize", function() {
+   
       var boundbox = new google.maps.LatLngBounds();
       for ( var i = 0; i < self.location().locations().length; i++ )
       {
-        //console.log(self.location().locations()[i].marker.getPosition());
         boundbox.extend(self.location().locations()[i].marker.getPosition());
       }
       self.map.setCenter(boundbox.getCenter());
       self.map.fitBounds(boundbox);
 
-
-});  
-
-
-
-      self.mapError(false);      
-  
-
-
+    });  
+    //no error
+    self.mapError(false);      
   }   
+  //error in loading map, display error
   else
   {
-
-
     self.mapError(true);
-         console.log("map error", self.mapError());   
-  
 
   }
-
-  // make sure the map bounds get updated on page resize
  
 
 }

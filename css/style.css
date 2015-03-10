@@ -38,7 +38,7 @@ html, body {
 	overflow: visible;
 	
 }
-#places-list {
+#places-list, .no-result {
 
 	list-style: none;
 	top: 20px;
@@ -77,6 +77,7 @@ html, body {
 	font-size: 24px;
 	background-color: white
 }
+
 .error {
 
 	display:none;

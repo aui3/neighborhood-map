@@ -2,66 +2,40 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width">
     <title>AUI Neighborhood Map! Explore Irvine!!</title>
 </head>
 <body >
    
-<div class="error" data-bind="style: { display : location().apiError() ? 'block' : 'none' }" >
+<div class = "error" data-bind = "style: { display : location().apiError() ? 'block' : 'none' }" >
 There was error completing your request. 
 </div>
 
-<div class="error" data-bind="style: { display : mapError() ? 'block' : 'none' }" >
+<div class = "error" data-bind = "style: { display : mapError() ? 'block' : 'none' }" >
  Google maps could not load!
 </div>
 
-<div id="search-div"  >
- <label id="search"> Search for:</label> <input id = "search-input" data-bind = "value : searchTerm" />
+<div id = "search-div"  >
+    <label id = "search"> Search for:</label> <input id = "search-input" data-bind = "value : searchTerm" />
 </div>
 
-<!--<div >
-    <ul id="places-list" data-bind="foreach : location().locations()">
-        <li id="list-item" data-bind="click : $parent.displayInfo"><p data-bind="text : name"></p></li>
+<div id = "list-div">
+    <ul id = "places-list" data-bind = "foreach : displayList">
+        <li id = "list-item" data-bind = "click : $parent.displayInfo"><p data-bind = "text : name"></p></li>
     </ul>
-</div>!-->
-
-
-<div id="list-div">
-    <ul id="places-list" data-bind="foreach : displayList">
-
-        <li id="list-item" data-bind="click : $parent.displayInfo"><p data-bind="text : name"></p></li>
-    </ul>
+    <span class = "no-result" data-bind = "visible: !displayList().length" > No results found </span>
 </div>
 
-<div id="map" >
+<div id = "map">
 
-</div >
-
-<!--<div id="test" data-bind="text : mapError() "> 
 </div>
-!-->
 
-<!--
-    <div data-bind="with : currentCat">
+<script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?libraries=places"></script>
+<script src="js/lib/knockout-3.2.0.js"></script>
+<script src="js/lib/jquery.min.js"></script>
+<script src="js/app.js"></script>
 
-        <h2 data-bind="text :  name"></h2>
-         
-        <h3 data-bind="text :  level"></h3>
-        <div data-bind="text : clickCount"></div>
 
-        <img src="" alt="cute Cat" data-bind="click : $parent.incrementCounter, attr : {src: imgSrc}">
-        
-        <ul data-bind="foreach : nickNames">
-            <li data-bind="text : $data"></li>
-        </ul>
-        
-    </div>
-!-->
-   <script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?libraries=places"></script>
-    <script src="js/lib/knockout-3.2.0.js"></script>
-    <script src="js/lib/jquery.min.js"></script>
-    <script src="js/app.js"></script>
-    
-    
-    <link href="css/style.css" rel="stylesheet" type="text/css">
+<link href="css/style.css" rel="stylesheet" type="text/css">
 </body>
 </html>
