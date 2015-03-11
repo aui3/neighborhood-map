@@ -10,7 +10,7 @@ html, body {
 
 #search-div {
 	position : fixed;
-	bottom : 40px;
+	bottom : 60px;
 	left  : 70px;
 	z-index : 100;
 	max-width : 500px;
@@ -29,6 +29,14 @@ html, body {
   
 
 }
+
+#list-toggle-button {
+	width : 200px;
+	height : 30px;
+	font-size: 16px;
+
+}
+
 #map {
 
 	margin : 0px;
