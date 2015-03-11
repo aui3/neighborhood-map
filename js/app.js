@@ -63,6 +63,8 @@ var LocationsViewModel = function () {
 
   self.searchTerm = ko.observable(''); 
 
+  //controls if list is hidden or displayed
+  self.toggleListBoolean = ko.observable(true);
 
   /* MAP */
   self.mapOptions = {
@@ -167,6 +169,13 @@ var LocationsViewModel = function () {
   else
   {
     self.mapError(true);
+
+  }
+
+  //hide or display list
+  self.toggleList = function () {
+
+      self.toggleListBoolean() ? self.toggleListBoolean(false) : self.toggleListBoolean(true);
 
   }
  

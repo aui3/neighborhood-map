@@ -17,13 +17,20 @@ There was error completing your request.
 
 <div id = "search-div"  >
     <label id = "search"> Search for:</label> <input id = "search-input" data-bind = "value : searchTerm" />
+    <button data-bind = "click : toggleList"> Toggle List Display</button>
 </div>
 
-<div id = "list-div">
+
+
+<div id = "list-div" data-bind = "style : { display : toggleListBoolean() ? 'block' : 'none' }" >
+        
+        
     <ul id = "places-list" data-bind = "foreach : displayList">
         <li id = "list-item" data-bind = "click : $parent.displayInfo"><p data-bind = "text : name"></p></li>
     </ul>
+    
     <span class = "no-result" data-bind = "visible: !displayList().length" > No results found </span>
+
 </div>
 
 <div id = "map">
