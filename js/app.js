@@ -70,7 +70,7 @@ var LocationsViewModel = function () {
   self.mapOptions = {
         //center at Irvine, CA's latitude and longitude
         center: { lat: 33.669444, lng: -117.823056},
-      zoom: 14
+      zoom: 12
   };
 
   if (typeof google === 'object'  && typeof google.maps === 'object') {
