@@ -116,7 +116,7 @@ var LocationsViewModel = function () {
             })(allPlaces[i]) );
 
           }
-    
+          google.maps.event.trigger(self.map, 'resize');
           return allPlaces;
         }
         //search term given, filter according to this term

@@ -14,7 +14,7 @@ html, body {
 	left  : 70px;
 	z-index : 100;
 	max-width : 500px;
-	width : 80%;
+	max-width : 80%;
 	height : 10%;
 	padding : 2%;
 
@@ -44,11 +44,11 @@ html, body {
 	/*top : 20px;
 	right : 20px;
 	position : fixed;
-	z-index : 100;*/
-	padding : 1%;
+	z-index : 100;
+	*/padding : 1%;
 	text-align : left;
-    max-width : 250px;
-    max-height : 550px;
+    width : 250px;
+    height : 550px;
     height:80%;
     overflow-x : hidden;
     background-color : white;
@@ -57,18 +57,11 @@ html, body {
 }
 
 .no-result {
-	list-style : none;
-	top : 20px;
-	right : 20px;
-	position : fixed;
-	z-index : 100;
-	padding : 1%;
-	text-align : left;
-    max-width : 250px;
-    max-height : 100px;
-    height : 80%;
-    
 
+	z-index :150;
+	position: fixed;
+	top : 50px;
+	right : 80px;
 }
 
 #list-item {
@@ -113,11 +106,15 @@ html, body {
 	
 }
 
-@media (max-width : 900px) {
+/*@media only screen  
+and (min-device-width : 320px) 
+and (max-device-width : 480px) 
+
+{
 	#places-list {
 
 		max-width : 150px;
 		max-height : 400px;
 	}
 
-}
+}*/
