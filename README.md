@@ -14,4 +14,4 @@ The search bar provides functionality to filter results from the list. You may f
 
 When a restaurant name is clicked, the marker corresponding to the retaurant is centered in the map.
 
-
+The <b>Toggle Display List</b> button will hide or display the list view of the places.
