@@ -2,6 +2,17 @@
 
 ============================
 
+<b>Instructions to run the project</b>
+
+<b>GitHub Pages Link:</b> http://aui3.github.io/neighborhood-map/
+<b>GitHub Repo:</b> https://github.com/aui3/neighborhood-map
+
+Alternately, the app can be run by opening in <b>index.html</b> file located inside the project folder.
+
+=============================
+
+Libraries used: Knockout
+
 The app uses the Foursquare API's <b>venues/explore</b> endpoint to get the list of ten restaurants in Irvine, CA. I am doing this by providing the category <em>food</em> to the <em>section</em> parameter in the API request to Foursquare.
 
 
@@ -13,5 +24,7 @@ Additional information about each location is given in an info box window which 
 The search bar provides functionality to filter results from the list. You may filter the list based upon the name of the restaurant.
 
 When a restaurant name is clicked, the marker corresponding to the retaurant is centered in the map.
+
+The <b>Toggle Display List</b> button will hide or display the list view of the places.
 
 

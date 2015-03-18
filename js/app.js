@@ -1,7 +1,7 @@
 /* LOCATION MODEL holds all information for the locations to be displayed*/
 var Locations = function () {
   
-  var self=this;
+  var self = this;
 
   self.locations = ko.observableArray();
   self.apiError = ko.observable(false);
@@ -10,15 +10,15 @@ var Locations = function () {
   self.loadData = (function () {
     
     //get top 10 restaurants for Irvine,CA
-    var foursquare="https://api.foursquare.com/v2/venues/explore?client_id=TCESTHYEP5B4JGEU2IHGJVXSQL3ONR0ZGML5DJY0OTEIJZ3X&client_secret=UBF0HHQEQG3K01KKTGXZLPGKBCPLKFK1VQFRBJ4GAMKKYDZ3&v=20130815&ll=33.669444,-117.823056&section=food&limit=10";  
+    var foursquare = "https://api.foursquare.com/v2/venues/explore?client_id=TCESTHYEP5B4JGEU2IHGJVXSQL3ONR0ZGML5DJY0OTEIJZ3X&client_secret=UBF0HHQEQG3K01KKTGXZLPGKBCPLKFK1VQFRBJ4GAMKKYDZ3&v=20130815&ll=33.669444,-117.823056&section=food&limit=10";  
     
     $.getJSON(foursquare,
 
       function(data) {
       
-        var places=data.response.groups[0].items;
+        var places = data.response.groups[0].items;
       
-        for (var i=0; i<places.length; i++) {
+        for (var i = 0; i<places.length; i++) {
           //add marker for this location
           var marker = new google.maps.Marker({
                         position: { lat: data.response.groups[0].items[i].venue.location.lat , 
@@ -49,17 +49,17 @@ var Locations = function () {
       });
     })();
 
-}
+};
 
 /*Location View Model*/
 var LocationsViewModel = function () {
 
-  var self=this;
+  var self = this;
 
   self.mapError = ko.observable(false);//0 if no error
 
   //array of all the places and all info pretaining to each place such as marker, info window etc 
-  self.location=ko.observable(new Locations());
+  self.location = ko.observable(new Locations());
 
   self.searchTerm = ko.observable(''); 
 
@@ -85,7 +85,7 @@ var LocationsViewModel = function () {
         
         var allPlaces = self.location().locations();
         
-        if (self.searchTerm() == '') { //display default list i.e all locations
+        if (self.searchTerm() === '') { //display default list i.e all locations
           
           //setmap of all markers. (add all makers to this map)
           for (var i = 0; i < allPlaces.length; i++) {
@@ -98,7 +98,7 @@ var LocationsViewModel = function () {
                 return function () {  
         
                   //check if an info window is not open set this window as last open window
-                  if(self.lastInfoWindow() == ''){
+                  if(self.lastInfoWindow() === ''){
                     self.lastInfoWindow(allPlacesCopy.infowindow);
                     allPlacesCopy.infowindow.open( self.map,this);
                     self.map.setCenter(this.getPosition());
@@ -112,7 +112,7 @@ var LocationsViewModel = function () {
                     self.lastInfoWindow(allPlacesCopy.infowindow);
                   }
 
-                }
+                };
             })(allPlaces[i]) );
 
           }
@@ -122,18 +122,18 @@ var LocationsViewModel = function () {
         //search term given, filter according to this term
         else { 
          
-          var filteredList=[];
+          var filteredList = [];
           //search for places matching the search term
-          for (var i=0; i<allPlaces.length; i++) {
+          for (var j = 0; j<allPlaces.length; j++) {
             
-            if ( allPlaces[i]['name'].toLowerCase().indexOf(self.searchTerm().toLowerCase()) != -1 ) { 
+            if ( allPlaces[j]['name'].toLowerCase().indexOf(self.searchTerm().toLowerCase()) != -1 ) { 
             
-                filteredList.push(allPlaces[i]);
+                filteredList.push(allPlaces[j]);
             
             }
             else { //hide the marker since this is not a display list item
 
-              allPlaces[i].marker.setMap(null);
+              allPlaces[j].marker.setMap(null);
             }
 
           }
@@ -177,9 +177,9 @@ var LocationsViewModel = function () {
 
       self.toggleListBoolean() ? self.toggleListBoolean(false) : self.toggleListBoolean(true);
 
-  }
+  };
  
 
-}
+};
 
-ko.applyBindings(new LocationsViewModel())
+ko.applyBindings(new LocationsViewModel());
